@@ -1,7 +1,7 @@
 ######Phylogenetic diversity from distribution maps iin ESRI shapefile format and phylogenies in nexus format######
 #############Last updated November 2013 by Andrea Paz#################
 
-
+###For using this script you need a folder containing distrbution files in ESRI shapefile format. If you have distribution maps in raster formats use the SDM script
 #Clean workspace
 rm(list=ls())
 
@@ -139,7 +139,7 @@ community_data=na.omit(community_data)
 head(community_data)
 
 #III-Phylogenetic diversity computation 
-  #computes only Faith´s PD others may be added
+  #computes only Faithï¿½s PD others may be added
 
 pd.result <-pd(community_data[,2:ncol(community_data)],user_phylogeny,include.root = TRUE) 
 
