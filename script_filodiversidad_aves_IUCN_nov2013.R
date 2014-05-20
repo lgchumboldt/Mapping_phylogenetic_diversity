@@ -16,7 +16,7 @@ library(picante)
 ####It elminates species for which the distribution does not include the area of the selected mask (values null and 0)#############
 
 rasterize_species= function (x,mask=selected_mask) {
-  r<-raster(ncol=1462,nrow=624)
+  r<-raster(ncol=1462,nrow=624) #Colombia extent may vary
   res(r)<-resolution 
   r<-crop(r, extent(selected_mask))
   values(r)<-0
