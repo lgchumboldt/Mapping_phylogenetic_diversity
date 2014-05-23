@@ -1,4 +1,5 @@
 ######Phylogenetic diversity from distribution models in tif format and phylogenies in nexus format######
+###This script applies to any distribution map in raster format changing only the extension type in line 52###
 #############Last updated January 2014 by Andrea Paz#################
 
 
@@ -122,7 +123,7 @@ community_data=na.omit(community_data)
 head(community_data)
 
 #III-Phylogenetic diversity computation 
-  #computes only Faith´s PD others may be added
+  #computes only Faithï¿½s PD others may be added
 
 pd.result <-pd(community_data[,2:ncol(community_data)],user_phylogeny,include.root = TRUE) 
 
