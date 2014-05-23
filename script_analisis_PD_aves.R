@@ -38,24 +38,25 @@ Birds_dataframe<-data.frame(dataframe_Birds_PD$PD_aves_IUCN_083,dataframe_Birds_
   
     #Add residuals to dataframe
     #LINEAR
-    Birds_dataframe$residuos_Pd_lineal<-rep(NA,length(Birds_dataframe[,1]))
-    Birds_dataframe$residuos_Pd_lineal[as.numeric(names(linear_residuals))]<-linear_residuals[names(linear_residuals)]
+    Birds_dataframe$PD_linear_residuals<-rep(NA,length(Birds_dataframe[,1]))
+    Birds_dataframe$PD_linear_residuals[as.numeric(names(linear_residuals))]<-linear_residuals[names(linear_residuals)]
     #LOESS
-    Birds_dataframe$residuos_Pd_loess<-rep(NA,length(Birds_dataframe[,1]))
-    Birds_dataframe$residuos_Pd_loess[as.numeric(names(loess_residuals))]<-loess_residuals[names(loess_residuals)]
+    Birds_dataframe$PD_loess_residuals<-rep(NA,length(Birds_dataframe[,1]))
+    Birds_dataframe$PD_loess_residuals[as.numeric(names(loess_residuals))]<-loess_residuals[names(loess_residuals)]
 
     #Generate rasters with residual values
-    Pd_aves<-raster("C:\\Users\\GIC 40\\Dropbox\\PD_aves_IUCN_083.asc")
-    residuos_lineal_raster<-Pd_aves
-    values(residuos_lineal_raster)<-NA
-    values(residuos_lineal_raster)<-marco_aves$residuos_Pd_lineal
-
-    Pd_aves<-raster("C:\\Users\\GIC 40\\Dropbox\\PD_aves_IUCN_083.asc")
-    residuos_loess_raster<-Pd_aves
-    values(residuos_loess_raster)<-NA
-    values(residuos_loess_raster)<-marco_aves$residuos_Pd_loess
-    writeRaster(residuos_lineal_raster,"C:\\Users\\GIC 40\\Dropbox\\residuals_lineal_PD.asc","ascii")
-    writeRaster(residuos_loess_raster,"C:\\Users\\GIC 40\\Dropbox\\residuals_loess_PD.asc","ascii")
+    PD_birds<-raster("C:\\Users\\GIC 40\\Dropbox\\PD_aves_IUCN_083.asc")
+    
+    #LINEAR
+    linear_residuals_rasterresiduos_lineal_raster<-PD_birds
+    values(linear_residuals_raster)<-NA
+    values(linear_residuals_raster)<- Birds_dataframe$PD_linear_residuals
+     writeRaster(linear_residuals_raster,"C:\\Users\\GIC 40\\Dropbox\\residuals_lineal_PD.asc","ascii")
+    #LOESS
+    loess_residuals_raster<-PD_birds
+    values(loess_residuals_raster)<-NA
+    values(loess_residuals_raster)<- Birds_dataframe$PD_loess_residuals
+    writeRaster(loess_residuals_raster,"C:\\Users\\GIC 40\\Dropbox\\residuals_loess_PD.asc","ascii")
 
 
 
@@ -66,22 +67,22 @@ Birds_dataframe<-data.frame(dataframe_Birds_PD$PD_aves_IUCN_083,dataframe_Birds_
     #Regressions
   
 
-    plot(Birds_dataframe$dataframe_Birds_SR.TD_aves_083,Birds_dataframe$dataframe_Birds_PD.PD_aves_IUCN_083,xlab="N�mero de especies",ylab="Diversidad filogen�tica (PD)", main="Regresi�n lineal")
+    plot(Birds_dataframe$dataframe_Birds_SR.TD_aves_083,Birds_dataframe$dataframe_Birds_PD.PD_aves_IUCN_083,xlab="Species richness",ylab="Phylogenetic diversity (PD)", main="Linear regression")
     abline(modelo_lineal,col="red")
-     plot(Birds_dataframe$dataframe_Birds_SR.TD_aves_083,Birds_dataframe$dataframe_Birds_PD.PD_aves_IUCN_083,xlab="N�mero de especies",ylab="Diversidad filogen�tica (PD)", main="Regresi�n loess")
-     Td_vals<-seq(0,600,1)
-     loess_vals<-predict(modelo_loess,Td_vals)
-     lines(loess_vals ~ Td_vals,col="red")
+     plot(Birds_dataframe$dataframe_Birds_SR.TD_aves_083,Birds_dataframe$dataframe_Birds_PD.PD_aves_IUCN_083,xlab="Species richness",ylab="Phylogenetic diversity (PD)", main="Loess regression")
+     SR_vals<-seq(0,600,1)
+     loess_vals<-predict(loess_model,SR_vals)
+     lines(loess_vals ~ SR_vals,col="red")
 
     #Residuals graph
 
-    plot(Birds_dataframe$dataframe_Birds_SR.TD_aves_083,Birds_dataframe$residuos_Pd_lineal,xlab="N�mero de especies",ylab="Residuos diversidad filogen�tica (PD)")
+    plot(Birds_dataframe$dataframe_Birds_SR.TD_aves_083,Birds_dataframe$PD_linear_residuals,xlab="Species richness",ylab="Phylogenetic diversity (PD) residuals")
     abline(0,0)
-    plot(Birds_dataframe$dataframe_Birds_SR.TD_aves_083,Birds_dataframe$residuos_Pd_loess,xlab="N�mero de especies",ylab="Residuos diversidad filogen�tica (PD)")
+    plot(Birds_dataframe$dataframe_Birds_SR.TD_aves_083,Birds_dataframe$residuos_Pd_loess,xlab="Species richness",ylab="Phylogenetic diversity (PD) residuals")
     abline(0,0)
 
     #Maps
-    plot(residuos_lineal_raster,box=F,axes=F)
-    plot(residuos_loess_raster,box=F,axes=F)
+    plot(linear_residuals_raster,box=F,axes=F)
+    plot(loess_residuals_raster,box=F,axes=F)
     plot(colombia)
-    extent(Pd_aves)
+    extent(PD_birds)
