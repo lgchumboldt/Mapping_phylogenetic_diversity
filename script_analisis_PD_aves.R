@@ -24,7 +24,7 @@ marco_Td_aves<-as.data.frame(Td_aves)
 marco_aves<-data.frame(marco_Pd_aves$PD_aves_IUCN_083,marco_Td_aves$TD_aves_IUCN_083)
 
 
-#Generar modelos de regresión 
+#Generar modelos de regresiï¿½n 
   #LINEAL
   modelo_lineal<-lm(marco_aves)
   #LOESS
@@ -38,15 +38,11 @@ marco_aves<-data.frame(marco_Pd_aves$PD_aves_IUCN_083,marco_Td_aves$TD_aves_IUCN
 #Agregar los resiudales al marco de datos
 marco_aves$residuos_Pd_lineal<-rep(NA,length(marco_aves[,1]))
 marco_aves$residuos_Pd_lineal[as.numeric(names(residuos_lineal))]<-residuos_lineal[names(residuos_lineal)]
-for(i in unique(as.numeric(names(residuos_lineal)))){
-  marco_aves$residuos_Pd_lineal[i]<-residuos_lineal[as.character(i)]
-}
+
 
 marco_aves$residuos_Pd_loess<-rep(NA,length(marco_aves[,1]))
 marco_aves$residuos_Pd_loess[as.numeric(names(residuos_loess))]<-residuos_loess[names(residuos_loess)]
-for(i in unique(as.numeric(names(residuos_loess)))){
-  marco_aves$residuos_Pd_loess[i]<-residuos_loess[as.character(i)]
-}
+
 #Generar rasters con los datos de residuos
 Pd_aves<-raster("C:\\Users\\GIC 40\\Dropbox\\PD_aves_IUCN_083.asc")
 residuos_lineal_raster<-Pd_aves
@@ -67,18 +63,18 @@ writeRaster(residuos_loess_raster,"C:\\Users\\GIC 40\\Dropbox\\residuals_loess_P
   #Regresiones
   par(mfrow=c(3,2),mar=c(4,4,3,3))
 
-  plot(marco_aves$marco_Td_aves.TD_aves_083,marco_aves$marco_Pd_aves.PD_aves_IUCN_083,xlab="Número de especies",ylab="Diversidad filogenética (PD)", main="Regresión lineal")
+  plot(marco_aves$marco_Td_aves.TD_aves_083,marco_aves$marco_Pd_aves.PD_aves_IUCN_083,xlab="Nï¿½mero de especies",ylab="Diversidad filogenï¿½tica (PD)", main="Regresiï¿½n lineal")
   abline(modelo_lineal,col="red")
-  plot(marco_aves$marco_Td_aves.TD_aves_083,marco_aves$marco_Pd_aves.PD_aves_IUCN_083,xlab="Número de especies",ylab="Diversidad filogenética (PD)", main="Regresión loess")
+  plot(marco_aves$marco_Td_aves.TD_aves_083,marco_aves$marco_Pd_aves.PD_aves_IUCN_083,xlab="Nï¿½mero de especies",ylab="Diversidad filogenï¿½tica (PD)", main="Regresiï¿½n loess")
   Td_vals<-seq(0,600,1)
   loess_vals<-predict(modelo_loess,Td_vals)
   lines(loess_vals ~ Td_vals,col="red")
 
 #Residuos
 
-plot(marco_aves$marco_Td_aves.TD_aves_083,marco_aves$residuos_Pd_lineal,xlab="Número de especies",ylab="Residuos diversidad filogenética (PD)")
+plot(marco_aves$marco_Td_aves.TD_aves_083,marco_aves$residuos_Pd_lineal,xlab="Nï¿½mero de especies",ylab="Residuos diversidad filogenï¿½tica (PD)")
 abline(0,0)
-plot(marco_aves$marco_Td_aves.TD_aves_083,marco_aves$residuos_Pd_loess,xlab="Número de especies",ylab="Residuos diversidad filogenética (PD)")
+plot(marco_aves$marco_Td_aves.TD_aves_083,marco_aves$residuos_Pd_loess,xlab="Nï¿½mero de especies",ylab="Residuos diversidad filogenï¿½tica (PD)")
 abline(0,0)
 
 #Mapas
