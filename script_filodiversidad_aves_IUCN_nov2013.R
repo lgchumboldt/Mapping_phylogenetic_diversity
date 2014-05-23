@@ -17,7 +17,7 @@ library(picante)
 ####It elminates species for which the distribution does not include the area of the selected mask (values null and 0)#############
 
 rasterize_species= function (x,mask=selected_mask) {
-  r<-raster(ncol=1462,nrow=624) #Colombia extent may vary
+  r<-raster(ncol=1462,nrow=624) #This is based on Colombia extent if you have a bigger area you should change it
   res(r)<-resolution 
   r<-crop(r, extent(selected_mask))
   values(r)<-0
@@ -73,7 +73,7 @@ rasterize_species= function (x,mask=selected_mask) {
   species_names<-sub(".shp","",distribution_files)
   table1<-as.data.frame(species_names)
   colnames(table1)<-"Grid"
-  write.table(table1,"species_list.txt",quote=F,row.names=F) #seria bueno que agregara el nombre de la mascara para saber si es colombia o paramo
+  write.table(table1,"species_list.txt",quote=F,row.names=F) 
 
   #Read Shape of the geographic Mask 
   selected_mask<-readShapePoly(working_mask)
@@ -84,11 +84,12 @@ rasterize_species= function (x,mask=selected_mask) {
    
 #Create empty raster of the desired area and resolution to assign pixel numbers
 r<-raster(ncol=1462,nrow=624)
-res(r)<-resolution #resolution
+res(r)<-resolution #resolution is user-defined
 r<-crop(r,extent(selected_mask))
+#Generate a raster that has the pixel number as the pixel value
 grid=r
 names(grid)="grid"
-grid[1:ncell(grid)]<-1:ncell(grid)
+grid[1:ncell(grid)]<-1:ncell(grid) 
 grid_list<-list(grid)
 names(grid_list)<-"Grid"
 
@@ -99,7 +100,7 @@ layers<-lapply(species_names,rasterize_species)
 names(layers)<-as.vector(table1$Grid)
 layers[sapply(layers,is.null)]<-NULL
 
-#Combine distributions with pixel number raster
+#Combine species distribution rasters with pixel number raster
 complete_list<-c(grid_list,layers)
 
 #Stack all distribution files and pixel numbers for PD computation
