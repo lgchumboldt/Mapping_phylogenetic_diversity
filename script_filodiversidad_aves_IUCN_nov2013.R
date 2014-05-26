@@ -111,7 +111,7 @@ Stack<-stack(complete_list)
 community_data<-as.data.frame(Stack)
 
 #Store 
-write.table(community_data, file = "communities_iucn_0_083.txt", append = FALSE,row.names=F,quote=F,sep="\t") #tratar de agregar nombre de mascara
+write.table(community_data, file = "communities_iucn_0_083.txt", append = FALSE,row.names=F,quote=F,sep="\t") 
 
 #Generate the list of species present in the mask area and write to file to obtain corresponding phylogeny
 
@@ -119,12 +119,12 @@ distribution_files1<-list.files(path=maps_folder, pattern= "*.asc$")
 species_names1<-sub(" .asc","",distribution_files1)
 table2<-as.data.frame(species_names1)
 colnames(table2)<-"Grid"
-write.table(table2,"final_species_list.txt",quote=F,row.names=F) #seria bueno incluir en el nombre del archivo el nombre de la mascara
+write.table(table2,"final_species_list.txt",quote=F,row.names=F) 
 
-#Generate a raster of taxonomic diversity (TD) for comparison
+#Generate a raster of species richness (SR) for comparison
 all_species<-stack(layers)
-TD<-calc(all_species,sum)
-writeRaster(TD,species_richness)
+SR<-calc(all_species,sum)
+writeRaster(SR,species_richness)
 
 
 #Phylogenetic diversity computation
@@ -141,7 +141,7 @@ community_data=na.omit(community_data)
 head(community_data)
 
 #III-Phylogenetic diversity computation 
-  #computes only Faith�s PD others may be added
+  #computes only Faith´s PD others may be added
 
 pd.result <-pd(community_data[,2:ncol(community_data)],user_phylogeny,include.root = TRUE) 
 
@@ -175,5 +175,6 @@ pd_ras[community_data$Grid]<-community_data$pd
 writeRaster(pd_ras,PD_map)
 
 #4-Optional plotting map in R (write to pdf?)
+
 plot(pd_ras)
 }
