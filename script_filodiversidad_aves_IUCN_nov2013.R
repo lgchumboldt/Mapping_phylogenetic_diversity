@@ -1,6 +1,6 @@
 ######Phylogenetic diversity from distribution maps iin ESRI shapefile format and phylogenies in nexus format######
 ####In case you have distribution maps in raster format use the other script####
-#############Last updated November 2013 by Andrea Paz#################
+#############Written by Andrea Paz and David Urbina#################
 
 ###For using this script you need a folder containing distrbution files in ESRI shapefile format. If you have distribution maps in raster formats use the SDM script
 #Clean workspace
