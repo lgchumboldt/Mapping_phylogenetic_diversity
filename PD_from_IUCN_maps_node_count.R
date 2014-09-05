@@ -103,9 +103,10 @@ FastXtreePhylo <- function(thisTree)
 
 #######Funcion: count nodes involved in a community######
 
-compute_node_based_length <- function( community,matrix_nodes) {
-  
+compute_node_based_length <- function( community,matrix_nodes, community_matrix=NULL) {
+  if(is.null(community_matrix)){
   community_matrix <- matrix_nodes[community,]
+  
   if (length(community) == 1) {
     result <- community_matrix
   }
@@ -115,7 +116,7 @@ compute_node_based_length <- function( community,matrix_nodes) {
     result <- bitwOr(a,b)
     community_matrix <- community_matrix[3:dim(community_matrix)[1],]
     community_matrix <- rbind(community_matrix, result)
-    compute_node_based_length(community_matrix,matrix_nodes)
+    compute_node_based_length(community_matrix=community_matrix)
   }
   else {
     a <- community_matrix[1,]
@@ -125,7 +126,28 @@ compute_node_based_length <- function( community,matrix_nodes) {
   node_length <- sum(result)
   return(node_length)
 }
-
+else {
+  if (dim(community_matrix)[1] == 1) {
+    result <- community_matrix
+  }
+  else if (dim(community_matrix)[1] > 3 ) {
+    a <- community_matrix[1,]
+    b <- community_matrix[2,]
+    result <- bitwOr(a,b)
+    community_matrix <- community_matrix[3:dim(community_matrix)[1],]
+    community_matrix <- rbind(community_matrix, result)
+    compute_node_based_length(community_matrix=community_matrix)
+  }
+  else {
+    a <- community_matrix[1,]
+    b <- community_matrix[2,]
+    result <- bitwOr(a,b)
+  }
+  node_length <- sum(result)
+  return(node_length)
+}
+}
+}
 ####End of function####
 
 ########################################USER DEFINED VARIABLES#########################################
@@ -232,9 +254,8 @@ taxa_elim<-gsub("[.]"," ",taxa_elim)
 layers[taxa_elim]<-NULL
 #Generate a raster of taxonomic diversity (TD) for comparison
 all_species<-stack(layers)
-TD1<-calc(all_species,sum)
-writeRaster(TD1,"SR_anfibios_solo_filo_0_083.asc") 
-writeRaster(TD1,species_richness) 
+TD<-calc(all_species,sum) 
+writeRaster(TD,species_richness) 
 
 ##fix phylogeny 
 anfibios2<-lista[[1]]
